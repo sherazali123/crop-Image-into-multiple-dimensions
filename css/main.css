@@ -5187,3 +5187,6 @@ a.badge:focus {
 #uploadImage input[type=file] {
   display: inline;
 }
+.container {
+  width: 100%;
+}

@@ -1,14 +1,11 @@
-<script>
-  var baseUrl = "<?php echo $baseUrl ?>";
-</script>
-<script src="<?php echo $baseUrl ?>js/jquery.min.js"></script>
-<script src="<?php echo $baseUrl ?>js/jquery.Jcrop.min.js"></script>
-<script src="<?php echo $baseUrl ?>js/main.js"></script>
+<link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/font-awesome.min.css">
+<link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/tooltip.min.css">
+<link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/dist/cropper.css">
+<link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/demo/css/main.css">
 
 <link rel="stylesheet" href="<?php echo $baseUrl ?>css/main.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $baseUrl ?>css/demos.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo $baseUrl ?>css/jquery.Jcrop.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo $baseUrl ?>css/bootstrap.min.css" type="text/css" />
 <style>
 .lab {
   padding: 3px;

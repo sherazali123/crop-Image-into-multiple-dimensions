@@ -14,58 +14,78 @@ jQuery(function($) {
   function updateCoords(Id, c) {
     Id.closest('form').find('input[name=_x]').val(c.x);
     Id.closest('form').find('input[name=_y]').val(c.y);
-    Id.closest('form').find('input[name=_w]').val(c.w);
-    Id.closest('form').find('input[name=_h]').val(c.h);
+    Id.closest('form').find('input[name=_w]').val(c.width);
+    Id.closest('form').find('input[name=_h]').val(c.height);
+    Id.closest('form').find('input[name=rotate]').val(c.rotate);
+    Id.closest('form').find('input[name=scaleX]').val(c.scaleX);
+    Id.closest('form').find('input[name=scaleY]').val(c.scaleY);
   }
   jQuery('.customImg').each(function() {
     width = jQuery(this).attr('customWidth');
     height = jQuery(this).attr('customHeight');
     original = jQuery(this).attr('original');
-
-    if (original !== 1) {
-      jQuery(this).Jcrop({
-        setSelect: [0, 0, width, height],
-        borderStyle: 'dotted',
-        allowResize: false,
-        allowSelect: false,
-        // addClass: 'jcrop-dark',
-        aspectRatio: width / height,
-        onChange: jcrop_target($(this)),
-        onSelect: jcrop_target($(this))
+    if (original != 1) {
+      jQuery(this).cropper({
+         aspectRatio: width / height,
+         maxWidth: width,
+         maxHeight: height,
+         guides: false,
+         background: false,
+         dragCrop: false,
+         rotatable: false,
+         scalable: false,
+         cropBoxResizable: false,
+         modal: true,
+         strict: true,
+         highlight: true,
+         autoCrop: true,
+         cropBoxMovable: true,
+         crop: function (e) {
+            updateCoords(jQuery(this), e);
+          }
       });
 
+      var cropBoxData = jQuery(this).cropper('getData');
 
+      cropBoxData.width = parseInt(width);
+      cropBoxData.height = parseInt(height);
+
+      jQuery(this).cropper('setData', cropBoxData);
+
+      cropBoxData = jQuery(this).cropper('getData');
+
+      updateCoords(jQuery(this), cropBoxData);
 
     }
 
 
   });
-
   function post_form_data(data) {
-    jQuery.ajax({
-      type: 'POST',
-      url: baseUrl + 'save.php',
-      data: {images: data},
-      beforeSend: function() {
-        jQuery("#saveAll").removeClass('btn-primary');
-        jQuery("#saveAll").addClass('btn-success');
-         jQuery("#saveAll").text('Saving...');
-     },
-      success: function(res) {
-        console.log(res);
-        var resp = JSON.parse(res);
-        console.log(resp);
-        var file = resp.file;
-        var width = resp.width;
-        var height = resp.height;
-        window.location.href = baseUrl + "show.php?file=" + file + '&w=' + width  + '&h=' + height;
-      },
-      error: function() {
-        jQuery("#saveAll").removeClass('btn-success');
-        jQuery("#saveAll").addClass('btn-primary');
-         jQuery("#saveAll").text('Save all');
-      }
-    });
+
+        jQuery.ajax({
+          type: 'POST',
+          url: baseUrl + 'save.php',
+          dataType:'json',
+          data: {images: data},
+          beforeSend: function() {
+            jQuery("#saveAll").removeClass('btn-primary');
+            jQuery("#saveAll").addClass('btn-success');
+             jQuery("#saveAll").text('Saving...');
+         },
+          success: function(resp) {
+            console.log(resp);
+            var file = resp.file;
+            var width = resp.width;
+            var height = resp.height;
+            window.location.href = baseUrl + "show.php?file=" + file + '&w=' + width  + '&h=' + height;
+          },
+          error: function(e) {
+            console.log('error: ', e);
+            jQuery("#saveAll").removeClass('btn-success');
+            jQuery("#saveAll").addClass('btn-primary');
+            jQuery("#saveAll").text('Save all');
+          }
+        });
   }
   jQuery("#saveAll").on('click', function(e) {
     var customImages = [];
@@ -76,8 +96,8 @@ jQuery(function($) {
 
       }
     });
-    // console.log(customImages);
     post_form_data(customImages);
+
   });
 
 });

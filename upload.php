@@ -136,14 +136,18 @@ if ($uploadOk == 0) {
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_y" name="_y" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_w" name="_w" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_h" name="_h" />
+        <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_rotate" name="rotate" />
+        <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_scaleX" name="scaleX" />
+        <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_scaleY" name="scaleY" />
     <?php endif; ?>
 		</form>
 	 <?php endforeach; ?>
-   <button id="saveAll" class="btn btn-primary">Save all</button
+   <button id="saveAll" class="btn btn-primary" type="button" >Save all</button>
     </div>
   <?php else: ?>
     <?php include '_form.php'; ?>
   <?php endif; ?>
 </div>
+<?php include('_footer.php'); ?>
 	</body>
 	</html>
