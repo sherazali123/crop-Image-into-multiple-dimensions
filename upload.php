@@ -20,19 +20,20 @@ if (!empty($_FILES['fileToUpload']['name'])) {
     $filename = basename($_FILES['fileToUpload']['name']);
     $filenameWithoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename);
     $folderName = $unique_id.'_'.$filenameWithoutExt;
-    $target_dir = $root_dir = 'uploads/'.$folderName.'/';
-    if (!file_exists($target_dir)) {
-        mkdir($target_dir, 0777, true);
-    }
+    $target_dir = $root_dir = '/';
+    // $target_dir = $root_dir = 'uploads/'.$folderName.'/';
+    // if (!file_exists($target_dir)) {
+    //     mkdir($target_dir, 0777, true);
+    // }
 // find dimensions
   list($width, $height, $type, $attr) = getimagesize($_FILES['fileToUpload']['tmp_name']);
 
-    $target_dir = $target_dir.'original/';
+    $target_dir = 'original/';
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
+    }
         $imagesSet = array();
         $imagesSet[] = array('width' => $width, 'height' => $height, 'original' => true);
-    }
 
     $target_file = $target_dir.$filename;
     $uploadOk = 1;
@@ -49,10 +50,10 @@ if (isset($_POST['submit'])) {
     }
 }
 // Check if file already exists
-if (file_exists($target_file)) {
-    $error[] = 'Sorry, file already exists.';
-    $uploadOk = 0;
-}
+// if (file_exists($target_file)) {
+//     $error[] = 'Sorry, file already exists.';
+//     $uploadOk = 0;
+// }
 
 // Allow certain file formats
 if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'jpeg') {
@@ -94,7 +95,9 @@ if ($uploadOk == 0) {
 
               if ($tempWidth >= 100 && $tempHeight >= 100) {
                   $imagesSet[] = array('width' => $tempWidth, 'height' => $tempHeight, 'original' => false);
-                  mkdir($root_dir.$tempWidth.'x'.$tempHeight.'/', 0777, true);
+                  if(!file_exists($tempWidth.'x'.$tempHeight.'/')){
+                    mkdir($tempWidth.'x'.$tempHeight.'/', 0777, true);
+                  }
               }
               $tempHeight = $tempHeight - $minus;
           }
@@ -124,9 +127,10 @@ if ($uploadOk == 0) {
     	<p><span class="label label-succcess"><?php echo $image['width']. ' x '.$image['height']; ?></span></p>
       <img class="customImg" customWidth="<?php echo $image['width']; ?>" customHeight="<?php echo $image['height']; ?>" original="<?php echo $image['original']; ?>" src="<?php echo $target_file; ?>" />
       <?php if (!$image['original']): ?>
+        <input type="hidden" value="<?php echo $width; ?>" name="originalWidth" />
+        <input type="hidden" value="<?php echo $height; ?>" name="originalHeight" />
         <input type="hidden" value="<?php echo $target_file; ?>" name="imageSource" />
         <input type="hidden" value="<?php echo $root_dir.$image['width'].'x'.$image['height'].'/'; ?>" name="imageDest" />
-        <input type="hidden" value="<?php echo $folderName; ?>" name="folderName" />
         <input type="hidden" value="<?php echo $filename; ?>" name="filename" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_x" name="_x" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_y" name="_y" />

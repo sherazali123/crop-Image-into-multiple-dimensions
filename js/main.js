@@ -55,8 +55,10 @@ jQuery(function($) {
         console.log(res);
         var resp = JSON.parse(res);
         console.log(resp);
-        var folderName = resp.folderName;
-        window.location.href = baseUrl + "show.php?file=" + folderName;
+        var file = resp.file;
+        var width = resp.width;
+        var height = resp.height;
+        window.location.href = baseUrl + "show.php?file=" + file + '&w=' + width  + '&h=' + height;
       },
       error: function() {
         jQuery("#saveAll").removeClass('btn-success');

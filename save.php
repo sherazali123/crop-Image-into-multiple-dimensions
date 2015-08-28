@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($d['name'] === 'imageDest') {
                     $imageDest = $d['value'];
                 }
-                if ($d['name'] === 'folderName') {
-                    $folderName = $d['value'];
-                }
+                // if ($d['name'] === 'folderName') {
+                //     $folderName = $d['value'];
+                // }
                 if ($d['name'] === 'filename') {
                     $filename = $d['value'];
                 }
@@ -35,13 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($d['name'] === '_h') {
                     $h = $d['value'];
                 }
+                if ($d['name'] === 'originalWidth') {
+                    $originalWidth = $d['value'];
+                }
+                if ($d['name'] === 'originalHeight') {
+                    $originalHeight = $d['value'];
+                }
             }
 
             $frame = new \Imagick($dir.'/'.$src);
             $frame->cropImage($w, $h, $x, $y);
             $frame->writeImage($dir.'/'.$imageDest.$filename);
         }
-        echo json_encode(array('success' => true, 'folderName' => $folderName));
+        echo json_encode(array('success' => true, 'file' => $filename, 'width' => $originalWidth, 'height' => $originalHeight));
         die;
     } else {
       echo json_encode(array('success' => false));
