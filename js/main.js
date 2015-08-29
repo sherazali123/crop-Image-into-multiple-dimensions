@@ -51,7 +51,6 @@ jQuery(function($) {
       console.log(getData);
       getData.width = parseInt(width);
       getData.height = parseInt(height);
-
       jQuery(this).cropper('setData', getData);
       getData = jQuery(this).cropper('getData');
       console.log(getData);

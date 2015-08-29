@@ -99,6 +99,7 @@ if ($uploadOk == 0) {
                   if(!file_exists($tempWidth.'x'.$tempHeight.'/')){
                     mkdir($tempWidth.'x'.$tempHeight.'/', 0777, true);
                   }
+                  
               }
               $tempHeight = $tempHeight - $minus;
           }
