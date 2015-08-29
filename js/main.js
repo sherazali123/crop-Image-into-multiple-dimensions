@@ -54,7 +54,7 @@ jQuery(function($) {
       getData.height = parseInt(height);
 
       jQuery(this).cropper('setData', getData);
-      
+
       getData = jQuery(this).cropper('getData');
 
       console.log(getData);
@@ -66,7 +66,6 @@ jQuery(function($) {
       jQuery(this).cropper('setCropBoxData', getData);
 
       getData = jQuery(this).cropper('getCropBoxData');
->>>>>>> 2e75300aa13d64a5f91b3bccd1a0a729283c8da6
 
       updateCoords(jQuery(this), getData);
 
