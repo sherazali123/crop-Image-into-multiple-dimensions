@@ -46,16 +46,16 @@ jQuery(function($) {
           }
       });
 
-      var cropBoxData = jQuery(this).cropper('getData');
+      var getData = jQuery(this).cropper('getCropBoxData');
 
-      cropBoxData.width = parseInt(width);
-      cropBoxData.height = parseInt(height);
+      getData.width = parseInt(width);
+      getData.height = parseInt(height);
 
-      jQuery(this).cropper('setData', cropBoxData);
+      jQuery(this).cropper('setCropBoxData', getData);
 
-      cropBoxData = jQuery(this).cropper('getData');
+      getData = jQuery(this).cropper('getCropBoxData');
 
-      updateCoords(jQuery(this), cropBoxData);
+      updateCoords(jQuery(this), getData);
 
     }
 
