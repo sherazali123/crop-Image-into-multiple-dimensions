@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/demo/css/main.css">
 
 
+
+
 <link rel="stylesheet" href="<?php echo $baseUrl ?>css/main.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo $baseUrl ?>css/demos.css" type="text/css" />
 <style>
