@@ -41,6 +41,7 @@ jQuery(function($) {
          autoCrop: true,
          cropBoxMovable: true,
          crop: function (e) {
+           console.log(e);
             updateCoords(jQuery(this), e);
           }
       });
@@ -80,7 +81,7 @@ jQuery(function($) {
             window.location.href = baseUrl + "show.php?file=" + file + '&w=' + width  + '&h=' + height;
           },
           error: function(e) {
-            console.log('error: ', e);
+            // console.log('error: ', e);
             jQuery("#saveAll").removeClass('btn-success');
             jQuery("#saveAll").addClass('btn-primary');
             jQuery("#saveAll").text('Save all');

@@ -132,6 +132,8 @@ if ($uploadOk == 0) {
         <input type="hidden" value="<?php echo $target_file; ?>" name="imageSource" />
         <input type="hidden" value="<?php echo $root_dir.$image['width'].'x'.$image['height'].'/'; ?>" name="imageDest" />
         <input type="hidden" value="<?php echo $filename; ?>" name="filename" />
+        <input type="hidden" value="<?php echo $image['width']; ?>" name="croppedOriginalWidth" />
+        <input type="hidden" value="<?php echo  $image['height']; ?>" name="croppedOriginalHeight" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_x" name="_x" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_y" name="_y" />
         <input type="hidden" value="0" id="crop_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>_w" name="_w" />

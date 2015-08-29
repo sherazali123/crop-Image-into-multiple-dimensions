@@ -41,11 +41,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($d['name'] === 'originalHeight') {
                     $originalHeight = $d['value'];
                 }
+                if ($d['name'] === 'croppedOriginalWidth') {
+                    $croppedOriginalWidth = $d['value'];
+                }
+                if ($d['name'] === 'croppedOriginalHeight') {
+                    $croppedOriginalHeight = $d['value'];
+                }
             }
 
             $frame = new \Imagick($dir.'/'.$src);
             $frame->cropImage($w, $h, $x, $y);
             $frame->writeImage($dir.'/'.$imageDest.$filename);
+
+            // resize again if zoomed by user
+            if($w != $croppedOriginalWidth || $h != $croppedOriginalHeight){
+              $resizeImg = new \Imagick($dir.'/'.$imageDest.$filename);
+              $resizeImg->resizeImage($croppedOriginalWidth, $croppedOriginalHeight, Imagick::FILTER_LANCZOS,1);
+              $resizeImg->writeImage($dir.'/'.$imageDest.$filename);
+            }
+
         }
         echo json_encode(array('success' => true, 'file' => $filename, 'width' => $originalWidth, 'height' => $originalHeight));
         die;
