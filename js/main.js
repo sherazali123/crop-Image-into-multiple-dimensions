@@ -1,4 +1,5 @@
-jQuery(function($) {
+// jQuery(function($) {
+jQuery( document ).ready(function() {
   var x = 0;
   var y = 0;
   var width;
@@ -16,15 +17,18 @@ jQuery(function($) {
     Id.closest('form').find('input[name=_y]').val(c.y);
     Id.closest('form').find('input[name=_w]').val(c.width);
     Id.closest('form').find('input[name=_h]').val(c.height);
-    Id.closest('form').find('input[name=rotate]').val(c.rotate);
-    Id.closest('form').find('input[name=scaleX]').val(c.scaleX);
-    Id.closest('form').find('input[name=scaleY]').val(c.scaleY);
+    // Id.closest('form').find('input[name=rotate]').val(c.rotate);
+    // Id.closest('form').find('input[name=scaleX]').val(c.scaleX);
+    // Id.closest('form').find('input[name=scaleY]').val(c.scaleY);
   }
   jQuery('.customImg').each(function() {
     width = jQuery(this).attr('customWidth');
     height = jQuery(this).attr('customHeight');
     original = jQuery(this).attr('original');
     if (original != 1) {
+
+      jQuery(this).cropper('destroy');
+
       jQuery(this).cropper({
          aspectRatio: width / height,
          maxWidth: width,
@@ -42,32 +46,31 @@ jQuery(function($) {
          highlight: true,
          autoCrop: true,
          cropBoxMovable: true,
-         crop: function (e) {
-          //  console.log(e);
+         crop: function(e){ // on i think every event drag/ preview change etc
             updateCoords(jQuery(this), e);
-          }
+         },
+         built: function (e) { // after the crop has been done
+
+           width = jQuery(this).attr('customWidth');
+           height = jQuery(this).attr('customHeight');
+           original = jQuery(this).attr('original');
+
+
+           var getData = jQuery(this).cropper('getCropBoxData');
+           console.log(getData);
+           getData.width = parseInt(width);
+           getData.height = parseInt(height);
+
+           jQuery(this).cropper('setCropBoxData', getData);
+
+           getData = jQuery(this).cropper('getCropBoxData');
+
+           console.log(getData);
+          },
+
       });
 
-      var getData = jQuery(this).cropper('getData');
-      console.log(getData);
-      getData.width = parseInt(width);
-      getData.height = parseInt(height);
 
-      jQuery(this).cropper('setData', getData);
-
-      getData = jQuery(this).cropper('getData');
-
-      console.log(getData);
-      var getData = jQuery(this).cropper('getCropBoxData');
-
-      getData.width = parseInt(width);
-      getData.height = parseInt(height);
-
-      jQuery(this).cropper('setCropBoxData', getData);
-
-      getData = jQuery(this).cropper('getCropBoxData');
-
-      updateCoords(jQuery(this), getData);
 
     }
 
