@@ -6,6 +6,7 @@ $error = array();
 <html>
 <head>
 <?php include('_header.php'); ?>
+<?php include('_footer.php'); ?>
 </head>
 <body>
 
@@ -150,6 +151,6 @@ if ($uploadOk == 0) {
     <?php include '_form.php'; ?>
   <?php endif; ?>
 </div>
-<?php include('_footer.php'); ?>
+
 	</body>
 	</html>

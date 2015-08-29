@@ -41,7 +41,7 @@ jQuery(function($) {
          autoCrop: true,
          cropBoxMovable: true,
          crop: function (e) {
-           console.log(e);
+          //  console.log(e);
             updateCoords(jQuery(this), e);
           }
       });
@@ -74,7 +74,7 @@ jQuery(function($) {
              jQuery("#saveAll").text('Saving...');
          },
           success: function(resp) {
-            console.log(resp);
+            // console.log(resp);
             var file = resp.file;
             var width = resp.width;
             var height = resp.height;
