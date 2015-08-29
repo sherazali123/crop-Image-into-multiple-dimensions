@@ -1,3 +1,9 @@
+<?php
+/*
+ * Upload  form
+ */
+ ?>
+
 <div class="well text-center">
   <h3>Select image to crop</h3>
   <form id="uploadImage" action="upload.php" method="post" enctype="multipart/form-data">

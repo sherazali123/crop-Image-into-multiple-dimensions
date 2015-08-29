@@ -1,19 +1,20 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(-1);
+/*
+ * save.php
+ * Accept post request from the upload.php to save requested cropped images
+ */
 
-
-
-
+// general config
 include '_config.php';
+// if the request is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $dir = dirname(__FILE__);
+    $dir = dirname(__FILE__); //
     if (!empty($_POST['images'])) {
-        $images = $_POST['images'];
+        $images = $_POST['images']; // get images from client end
         foreach ($images as $key => $image) {
             foreach ($image as $k => $d) {
+                // gather required paramters
                 if ($d['name'] === 'imageSource') {
                     $src = $d['value'];
                 }
@@ -52,25 +53,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
+            // crop on server side using Imagick
             $frame = new \Imagick($dir.'/'.$src);
             $frame->cropImage($w, $h, $x, $y);
+            // save to root/wxh directory
             $frame->writeImage($dir.'/'.$imageDest.$filename);
 
-            // resize again if zoomed by user
-            if($w != $croppedOriginalWidth || $h != $croppedOriginalHeight){
-              $resizeImg = new \Imagick($dir.'/'.$imageDest.$filename);
-              $resizeImg->resizeImage($croppedOriginalWidth, $croppedOriginalHeight, Imagick::FILTER_LANCZOS,1);
-              $resizeImg->writeImage($dir.'/'.$imageDest.$filename);
+            // resize again if zoomed by user according to the requested parameters
+            if ($w != $croppedOriginalWidth || $h != $croppedOriginalHeight) {
+                $resizeImg = new \Imagick($dir.'/'.$imageDest.$filename);
+                $resizeImg->resizeImage($croppedOriginalWidth, $croppedOriginalHeight, Imagick::FILTER_LANCZOS, 1);
+                $resizeImg->writeImage($dir.'/'.$imageDest.$filename);
             }
-
         }
         echo json_encode(array('success' => true, 'file' => $filename, 'width' => $originalWidth, 'height' => $originalHeight));
         die;
     } else {
-      echo json_encode(array('success' => false));
-      die;
+        echo json_encode(array('success' => false));
+        die;
     }
-
 } else {
     echo json_encode(array('success' => false));
     die;

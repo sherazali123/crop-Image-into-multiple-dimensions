@@ -1,4 +1,11 @@
+<?php
 
+/*
+ * _header.php
+ * css assets
+ */
+
+ ?>
 <link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/font-awesome.min.css">
 <link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo $baseUrl ?>croppermaster/assets/css/tooltip.min.css">

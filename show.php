@@ -7,7 +7,9 @@ $error = array();
 <head>
 <?php include '_header.php'; ?>
 </head>
-<body>
+<body class="show">
+  <div class="row text-center">
+  <a href="<?php echo $baseUrl.'index.php'; ?>" class="btn btn-primary text-center">Upload more</a></div>
 <div class="container">
   <?php if (!empty($error)): ?>
     <?php foreach ($error as $e): ?>

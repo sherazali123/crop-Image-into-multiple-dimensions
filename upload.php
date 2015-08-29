@@ -1,4 +1,8 @@
 <?php
+/*
+ * upload.php
+ * fetch requested file and show multiple required times and integrate a relevent cropper on every image
+ */
 include('_config.php');
 $error = array();
  ?>
@@ -70,23 +74,32 @@ if ($uploadOk == 0) {
         $minus = 100;
         $maxWidth = 2000;
         $maxHeights = 2000;
+        // start from 2000 if the width is > 2000px
         if($width > $maxWidth)
         {
           $width = 2000;
         }
+        // start from 2000 if the height is > 2000px
         if($height > $maxHeights)
         {
           $height = 2000;
         }
+
+        // width iterations to crop
         $iterateWidthXTimes = (int) $width / 100;
 
+        // height iterations
         $iterateHeightXTimes = (int) $height / 100;
+
+        // subtract extra numbers if width is not multiple of 100
         if($width%100 > 0){
           $tempWidth = $width - ($width%100);
         } else {
           $tempWidth = $width;
         }
+
         for ($i=0; $i < $iterateWidthXTimes; $i++) {
+          // subtract extra numbers if height is not multiple of 100
           if($height%100 > 0){
             $tempHeight = $height - ($height%100);
           } else {
@@ -115,6 +128,7 @@ if ($uploadOk == 0) {
 }
     ?>
 <div class="container">
+
   <?php if (!empty($error)): ?>
     <?php foreach ($error as $e): ?>
     <div class="row">
@@ -124,6 +138,7 @@ if ($uploadOk == 0) {
   <?php endif; ?>
 	<?php if ($uploaded) : ?>
     <div class="row text-center">
+      <button id="saveAll2" class="btn btn-primary saveAll" type="button" >Save all</button>
 	<?php foreach ($imagesSet as $image): ?>
 		<form style=" text-align: -webkit-center;" action="http://www.google.com" method="POST" class="customizeImagesForms"  id="image_<?php echo $image['width']; ?>_<?php echo $image['height']; ?>">
     	<p><span class="label label-succcess"><?php echo $image['width']. ' x '.$image['height']; ?></span></p>
@@ -146,7 +161,7 @@ if ($uploadOk == 0) {
     <?php endif; ?>
 		</form>
 	 <?php endforeach; ?>
-   <button id="saveAll" class="btn btn-primary" type="button" >Save all</button>
+   <button id="saveAll" class="btn btn-primary saveAll" type="button" >Save all</button>
     </div>
   <?php else: ?>
     <?php include '_form.php'; ?>
