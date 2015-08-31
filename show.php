@@ -1,6 +1,6 @@
 <?php
 include '_config.php';
-$error = array();
+$_dty_error = array();
  ?>
 <!DOCTYPE html>
 <html>
@@ -9,116 +9,106 @@ $error = array();
 </head>
 <body class="show">
   <div class="row text-center">
-  <a href="<?php echo $baseUrl.'index.php'; ?>" class="btn btn-primary text-center">Upload more</a></div>
+  <a href="<?php echo $_dty_baseUrl.'index.php'; ?>" class="btn btn-primary text-center">Upload more</a></div>
 <div class="container">
-  <?php if (!empty($error)): ?>
-    <?php foreach ($error as $e): ?>
+  <?php if (!empty($_dty_error)): ?>
+    <?php foreach ($_dty_error as $e): ?>
     <div class="row">
-      <div class="alert alert-danger"><?php echo $e;
-          ?></div>
+      <div class="alert alert-danger">
+        <?php echo $e; ?>
+      </div>
     </div>
-    <?php endforeach;
-          ?>
-  <?php endif;
-          ?>
-          </div>
+    <?php endforeach; ?>
+  <?php endif; ?>
+</div>
 <?php
+  // get file name from the url
+  $_dty_filename = $_GET['file'];
+  // get width and height to show required images
+  $_dty_width = $_GET['w'];
+  $_dty_height = $_GET['h'];
 
-  $filename = $_GET['file'];
-  $width = $_GET['w'];
-  $height = $_GET['h'];
-  if (empty($filename) || empty($width) || empty($height)) {
+  // width and height in the url are required
+  if (empty($_dty_filename) || empty($_dty_width) || empty($_dty_height)) {
       echo 'Not allowed to access.';
       die;
   }
-  if (!is_numeric($width) || !is_numeric($height)) {
+  // must be numbers
+  if (!is_numeric($_dty_width) || !is_numeric($_dty_height)) {
       echo 'Invalid input';
       die;
   }
   $dir = dirname(__FILE__);
 
-  $imagesSet = array();
-  $imagesSet[] = array('width' => $width, 'height' => $height, 'original' => true , 'link' => $baseUrl.'original/'.$filename);
+  // start creating array for cropped images to display
+  $_dty_imagesSet = array();
+  // here is the original
+  $_dty_imagesSet[] = array('width' => $_dty_width, 'height' => $_dty_height, 'original' => true , 'link' => $_dty_baseUrl.'original/'.$_dty_filename);
 
-  $minus = 100;
-  $maxWidth = 2000;
-  $maxHeights = 2000;
-  if ($width > $maxWidth) {
-      $width = 2000;
-  }
-  if ($height > $maxHeights) {
-      $height = 2000;
-  }
-  $iterateWidthXTimes = (int) $width / 100;
+  // show by multiple of 100
+  $_dty_minus = 100;
 
-  $iterateHeightXTimes = (int) $height / 100;
-  if ($width % 100 > 0) {
-      $tempWidth = $width - ($width % 100);
+  // max width and height
+  $_dty_maxWidth = 2000;
+  $_dty_maxHeights = 2000;
+  if ($_dty_width > $_dty_maxWidth) {
+      $_dty_width = 2000;
+  }
+  if ($_dty_height > $_dty_maxHeights) {
+      $_dty_height = 2000;
+  }
+  // how many images according to width
+  $_dty_iterateWidthXTimes = (int) $_dty_width / 100;
+  // how many images according to height
+  $_dty_iterateHeightXTimes = (int) $_dty_height / 100;
+
+  // if not multiple of 100
+  if ($_dty_width % 100 > 0) {
+      $_dty_tempWidth = $_dty_width - ($_dty_width % 100);
   } else {
-      $tempWidth = $width;
+      $_dty_tempWidth = $_dty_width;
   }
-  for ($i = 0; $i < $iterateWidthXTimes; ++$i) {
-      if ($height % 100 > 0) {
-          $tempHeight = $height - ($height % 100);
+  for ($i = 0; $i < $_dty_iterateWidthXTimes; ++$i) {
+      // if not multiple of 100
+      if ($_dty_height % 100 > 0) {
+          $_dty_tempHeight = $_dty_height - ($_dty_height % 100);
       } else {
-          $tempHeight = $height;
+          $_dty_tempHeight = $_dty_height;
       }
-      for ($j = 0; $j < $iterateHeightXTimes; ++$j) {
-          if ($tempWidth >= 100 && $tempHeight >= 100) {
-              $imagesSet[] = array('width' => $tempWidth, 'height' => $tempHeight, 'original' => false, 'link' => $baseUrl.$tempWidth.'x'.$tempHeight.'/'.$filename);
-              if (!file_exists($tempWidth.'x'.$tempHeight.'/')) {
-                  mkdir($tempWidth.'x'.$tempHeight.'/', 0777, true);
+      for ($j = 0; $j < $_dty_iterateHeightXTimes; ++$j) {
+          if ($_dty_tempWidth >= 100 && $_dty_tempHeight >= 100) {
+              $_dty_imagesSet[] = array('width' => $_dty_tempWidth, 'height' => $_dty_tempHeight, 'original' => false, 'link' => $_dty_baseUrl.$_dty_tempWidth.'x'.$_dty_tempHeight.'/'.$_dty_filename);
+              // create requierd w/h dir if doesnt exists
+              if (!file_exists($_dty_tempWidth.'x'.$_dty_tempHeight.'/')) {
+                  mkdir($_dty_tempWidth.'x'.$_dty_tempHeight.'/', 0777, true);
               }
           }
-          $tempHeight = $tempHeight - $minus;
+          $_dty_tempHeight = $_dty_tempHeight - $_dty_minus;
       }
-      $tempWidth = $tempWidth - $minus;
+      $_dty_tempWidth = $_dty_tempWidth - $_dty_minus;
   }
 
-      foreach ($imagesSet as $file) {
+      foreach ($_dty_imagesSet as $file) {
           ?>
-
-
-
 <div class="container">
-
-
   <div class="row text-center">
-
-
-    <div class="panel panel-default">
-  <div class="panel-heading">
-    <?php
-      if ($file['original'] === true) {
-          ?>
-        <span class="label label-info">ORIGINAL</span>
-        <?php
-
-      }
-          ?>
-    <span class="label label-default lab">File: <?php echo $filename;   ?></span>
-    <span class="label label-primary lab">Dimensions(w x h): <?php echo $file['width'].' x '.$file['height'];   ?></span>
-    <span class="label label-success lab">View: <a href="<?php echo $file['link']; ?>" target="_blank">Click here to view</a></span>
-
-  </div>
-  <div class="panel-body">
-        <img src="<?php echo $file['link'];?>" />
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <?php if ($file['original'] === true) { ?>
+              <span class="label label-info">ORIGINAL</span>
+          <?php } ?>
+              <span class="label label-default lab">File: <?php echo $_dty_filename;   ?></span>
+              <span class="label label-primary lab">Dimensions(w x h): <?php echo $file['width'].' x '.$file['height'];   ?></span>
+              <span class="label label-success lab">View: <a href="<?php echo $file['link']; ?>" target="_blank">Click here to view</a></span>
+        </div>
+        <div class="panel-body">
+              <img src="<?php echo $file['link'];?>" />
+        </div>
+    </div>
   </div>
 </div>
-
-  </div>
-
-</div>
-
-
-
-
-<?php
-
-      }
-
- ?>
+<?php } ?>
  <div class="row text-center">
- <a href="<?php echo $baseUrl.'index.php'; ?>" class="btn btn-primary text-center">Upload more</a></div>
-	</body>
-	</html>
+ <a href="<?php echo $_dty_baseUrl.'index.php'; ?>" class="btn btn-primary text-center">Upload more</a></div>
+</body>
+</html>

@@ -9,70 +9,74 @@
 include '_config.php';
 // if the request is POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $dir = dirname(__FILE__); //
+    $_dty_dir = dirname(__FILE__); //
     if (!empty($_POST['images'])) {
-        $images = $_POST['images']; // get images from client end
-        foreach ($images as $key => $image) {
+        $_dty_images = $_POST['images']; // get images from client end
+        foreach ($_dty_images as $key => $image) {
             foreach ($image as $k => $d) {
                 // gather required paramters
                 if ($d['name'] === 'imageSource') {
-                    $src = $d['value'];
+                    $_dty_src = $d['value'];
                 }
                 if ($d['name'] === 'imageDest') {
-                    $imageDest = $d['value'];
+                    $_dty_imageDest = $d['value'];
                 }
                 // if ($d['name'] === 'folderName') {
-                //     $folderName = $d['value'];
+                //     $_dty_folderName = $d['value'];
                 // }
                 if ($d['name'] === 'filename') {
-                    $filename = $d['value'];
+                    $_dty_filename = $d['value'];
                 }
                 if ($d['name'] === '_x') {
-                    $x = $d['value'];
+                    $_dty_x = $d['value'];
                 }
                 if ($d['name'] === '_y') {
-                    $y = $d['value'];
+                    $_dty_y = $d['value'];
                 }
                 if ($d['name'] === '_w') {
-                    $w = $d['value'];
+                    $_dty_w = $d['value'];
                 }
                 if ($d['name'] === '_h') {
-                    $h = $d['value'];
+                    $_dty_h = $d['value'];
                 }
                 if ($d['name'] === 'originalWidth') {
-                    $originalWidth = $d['value'];
+                    $_dty_originalWidth = $d['value'];
                 }
                 if ($d['name'] === 'originalHeight') {
-                    $originalHeight = $d['value'];
+                    $_dty_originalHeight = $d['value'];
                 }
                 if ($d['name'] === 'croppedOriginalWidth') {
-                    $croppedOriginalWidth = $d['value'];
+                    $_dty_croppedOriginalWidth = $d['value'];
                 }
                 if ($d['name'] === 'croppedOriginalHeight') {
-                    $croppedOriginalHeight = $d['value'];
+                    $_dty_croppedOriginalHeight = $d['value'];
                 }
             }
 
             // crop on server side using Imagick
-            $frame = new \Imagick($dir.'/'.$src);
-            $frame->cropImage($w, $h, $x, $y);
+            $_dty_frame = new \Imagick($_dty_dir.'/'.$_dty_src);
+            $_dty_frame->cropImage($_dty_w, $_dty_h, $_dty_x, $_dty_y);
             // save to root/wxh directory
-            $frame->writeImage($dir.'/'.$imageDest.$filename);
+            $_dty_frame->writeImage($_dty_dir.'/'.$_dty_imageDest.$_dty_filename);
 
             // resize again if zoomed by user according to the requested parameters
-            if ($w != $croppedOriginalWidth || $h != $croppedOriginalHeight) {
-                $resizeImg = new \Imagick($dir.'/'.$imageDest.$filename);
-                $resizeImg->resizeImage($croppedOriginalWidth, $croppedOriginalHeight, Imagick::FILTER_LANCZOS, 1);
-                $resizeImg->writeImage($dir.'/'.$imageDest.$filename);
+            if ($_dty_w != $_dty_croppedOriginalWidth || $_dty_h != $_dty_croppedOriginalHeight) {
+
+                // create new Imagik instance to resize the cropped image again because of zoomed
+                $_dty_resizeImg = new \Imagick($_dty_dir.'/'.$_dty_imageDest.$_dty_filename);
+                // resizing here
+                $_dty_resizeImg->resizeImage($_dty_croppedOriginalWidth, $_dty_croppedOriginalHeight, Imagick::FILTER_LANCZOS, 1);
+                // save to root/wxh directory
+                $_dty_resizeImg->writeImage($_dty_dir.'/'.$_dty_imageDest.$_dty_filename);
             }
         }
-        echo json_encode(array('success' => true, 'file' => $filename, 'width' => $originalWidth, 'height' => $originalHeight));
+        echo json_encode(array('_dty_success' => true, '_dty_file' => $_dty_filename, '_dty_width' => $_dty_originalWidth, '_dty_height' => $_dty_originalHeight));
         die;
     } else {
-        echo json_encode(array('success' => false));
+        echo json_encode(array('_dty_success' => false));
         die;
     }
 } else {
-    echo json_encode(array('success' => false));
+    echo json_encode(array('_dty_success' => false));
     die;
 }

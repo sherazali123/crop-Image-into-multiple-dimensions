@@ -9,9 +9,9 @@ jQuery(document).ready(function() {
   });
   var x = 0;
   var y = 0;
-  var width;
-  var height;
-  var original;
+  var _dty_width;
+  var _dty_height;
+  var _dty_original;
 
   /*
    * Update dimensions of image when cropper starts/changes
@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
    * @param c dimensions
    * @return void
    */
-  function updateCoords(Id, c) {
+  function _dty_updateCoords(Id, c) {
     Id.closest('form').find('input[name=_x]').val(c.x);
     Id.closest('form').find('input[name=_y]').val(c.y);
     Id.closest('form').find('input[name=_w]').val(c.width);
@@ -30,17 +30,19 @@ jQuery(document).ready(function() {
    * traverse each image and integrate cropper with the image
    */
   jQuery('.customImg').each(function() {
-    width = jQuery(this).attr('customWidth');
-    height = jQuery(this).attr('customHeight');
-    original = jQuery(this).attr('original');
-    if (original != 1) {
-
+    _dty_width = jQuery(this).attr('customWidth');
+    _dty_height = jQuery(this).attr('customHeight');
+    _dty_original = jQuery(this).attr('original');
+    // if the image is not original
+    if (_dty_original != 1) {
+      // destry the cropper if it's already there with the image
       jQuery(this).cropper('destroy');
 
+      // attach the cropper with the image with required options set e.g. zoomable, can not be resized etc etc
       jQuery(this).cropper({
-        aspectRatio: width / height,
-        maxWidth: width,
-        maxHeight: height,
+        aspectRatio: _dty_width / _dty_height,
+        maxWidth: _dty_width,
+        maxHeight: _dty_height,
         guides: false,
         background: false,
         dragCrop: false,
@@ -56,20 +58,22 @@ jQuery(document).ready(function() {
         autoCrop: true,
         cropBoxMovable: true,
         crop: function(e) { // on i think every event drag/ preview change etc
-          updateCoords(jQuery(this), e);
+          _dty_updateCoords(jQuery(this), e);
         },
         built: function(e) { // after the crop has been done
 
-          width = jQuery(this).attr('customWidth');
-          height = jQuery(this).attr('customHeight');
-          original = jQuery(this).attr('original');
+          // as it's a callback cant access gloabl variables so access current width, height and original in the each(loop)
+          _dty_width = jQuery(this).attr('customWidth');
+          _dty_height = jQuery(this).attr('customHeight');
+          _dty_original = jQuery(this).attr('original');
 
-
+          // get cropper image data (x,y,w,h)
           var getData = jQuery(this).cropper('getCropBoxData');
           //  console.log(getData);
-          getData.width = parseInt(width);
-          getData.height = parseInt(height);
-
+          // convert string to integer
+          getData.width = parseInt(_dty_width);
+          getData.height = parseInt(_dty_height);
+          // set new cropped area by new width and height
           jQuery(this).cropper('setCropBoxData', getData);
 
           getData = jQuery(this).cropper('getCropBoxData');
@@ -90,50 +94,50 @@ jQuery(document).ready(function() {
    * @param data cropped content
    * @return void
    */
-  function post_form_data(data) {
+  function _dty_post_form_data(_dty_data) {
     Pace.track(function() {
       jQuery.ajax({
         type: 'POST',
-        url: baseUrl + 'save.php',
+        url: _dty_baseUrl + 'save.php',
         dataType: 'json',
         data: {
-          images: data
+          images: _dty_data
         },
         beforeSend: function() {
-          jQuery(".saveAll").removeClass('btn-primary');
-          jQuery(".saveAll").addClass('btn-success');
-          jQuery(".saveAll").text('Saving...');
+          jQuery("._dty_saveAll").removeClass('btn-primary');
+          jQuery("._dty_saveAll").addClass('btn-success');
+          jQuery("._dty_saveAll").text('Saving...');
         },
         success: function(resp) {
           // console.log(resp);
           //  Pace.stop;
-          var file = resp.file;
-          var width = resp.width;
-          var height = resp.height;
-          window.location.href = baseUrl + "show.php?file=" + file + '&w=' + width + '&h=' + height;
+          var _dty_file = resp._dty_file;
+          var _dty_width = resp.width;
+          var _dty_height = resp.height;
+          window.location.href = _dty_baseUrl + "show.php?file=" + _dty_file + '&w=' + _dty_width + '&h=' + _dty_height;
         },
         error: function(e) {
           // console.log('error: ', e);
           //  Pace.stop;
-          jQuery(".saveAll").removeClass('btn-success');
-          jQuery(".saveAll").addClass('btn-primary');
-          jQuery(".saveAll").text('Save all');
+          jQuery("._dty_saveAll").removeClass('btn-success');
+          jQuery("._dty_saveAll").addClass('btn-primary');
+          jQuery("._dty_saveAll").text('Save all');
         }
       });
     });
 
   }
   // will be started when user will click on save all button to save cropped images
-  jQuery("#saveAll, #saveAll2").on('click', function(e) {
-    var customImages = [];
-    jQuery('.customizeImagesForms').each(function() {
+  jQuery("#_dty_saveAll, #_dty_saveAll2").on('click', function(e) {
+    var _dty_customImages = [];
+    jQuery('._dty_customizeImagesForms').each(function() {
       if (jQuery(this).find('img').attr('original') != 1) {
-
-        customImages.push(jQuery(this).serializeArray());
+        // push cropped data in array one by one and searlize it
+        _dty_customImages.push(jQuery(this).serializeArray());
 
       }
     });
-    post_form_data(customImages);
+    _dty_post_form_data(_dty_customImages);
 
   });
 

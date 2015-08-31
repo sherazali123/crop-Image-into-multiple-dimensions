@@ -1,6 +1,6 @@
 <?php
 /*
- * index.php 
+ * index.php
  * Upload new image form layout
  */
 include('_config.php');
