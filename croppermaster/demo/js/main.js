@@ -5,6 +5,7 @@ $(function () {
   var console = window.console || { log: function () {} };
   var $body = $('body');
 
+
   $('[data-toggle="tooltip"]').tooltip();
   $.fn.tooltip.noConflict();
   $body.tooltip();

@@ -8,17 +8,21 @@ include('_config.php');
 
   <!DOCTYPE html>
   <html>
-    <?php include('_header.php'); ?>
   <head>
+    <!-- Header: Including all the css content here -->
+    <?php include('_header.php'); ?>
 
   </head>
 
   <body>
 
     <body>
+      <!-- Container -->
       <div class="container">
+        <!-- Including image upload form -->
         <?php include('_form.php'); ?>
       </div>
+      <!-- Container end -->
     </body>
 
   </html>

@@ -3,4 +3,6 @@
  * _config.php
  * Put all the configurations here
  */
-$_dty_baseUrl = 'http://masonry.pics/';
+
+ // site url
+$_dty_baseUrl = 'http://localhost/photouploading/';
