@@ -109,6 +109,19 @@ if (!empty($_FILES['fileToUpload']['name'])) {
         // moving upload image in the original folder
         if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $_dty_target_file)) {
 
+          // root directory real path as Imagak, a php extension to crop images, use real path to access and save file on server
+          $_dty_dir = dirname(__FILE__);
+
+          // creating Imagik instance for orginal upload file in orignal folder that would be cropped and save into the destination.
+          // Note:- Original will be the same at the same location
+          $_dty_frame = new \Imagick($_dty_dir.'/'.$_dty_target_file);
+          // var_dump($_dty_dir.'/'.$_dty_target_file);die;
+          $_dty_frame->setImageCompression(Imagick::COMPRESSION_JPEG);
+          $_dty_frame->setImageCompressionQuality(80);
+
+          // save to root/wxh directory
+          $_dty_frame->writeImage($_dty_dir.'/'.$_dty_target_file);
+
             // mainting a variable _dty_minus with mentioned value. It will populate the cropping form with dimensions (width and height multiple of this variable )
             $_dty_minus = 100;
 
